@@ -2,7 +2,6 @@ COPTS=-Wall -g -c  -O0 -std=c++0x -Wno-reorder
 OBJS=main.o \
 	 langlex.o \
 	 cSymbol.o \
-	 cSymbolTable.o \
 	 langparse.o
 
 all: lang

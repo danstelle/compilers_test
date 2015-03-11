@@ -9,7 +9,6 @@
 #include <fstream>
 #include "lex.h"
 #include "langparse.h"
-#include "codegen.h"
 
 extern cAstNode * yyast_root;
 
@@ -56,7 +55,7 @@ int main(int argc, char **argv)
     {
         if (result == 0)
         {
-            output << yyast_root->toString() << std::endl;
+            output << yyast_root->Display() << std::endl;
         } 
         else 
         {

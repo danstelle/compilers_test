@@ -4,8 +4,6 @@
 // Author: Daniel Stelle daniel.stelle@oit.edu
 
 #include "lex.h"
-//#include "langparse.h"
-
 
 #define RETURN(a) return Return(a);
 static int Return(int val);
@@ -18,11 +16,9 @@ static int Return(int val);
 
 
     /* definitions go here */
-punctuation         [\.\,\;\[\]\{\}\(\)]
-operators           [+\-*/%=!<]
-identifier          [a-zA-Z][a-zA-Z0-9_]*
+operators           [+\-*/]
+identifier          [a-z]+
 integer_const       -?[0-9]+
-float_const         -?[0-9]+[\.][0-9]+
 whitespace          [' '\t\n]+
 comment             "//".*$
 junk                .
@@ -30,26 +26,13 @@ junk                .
 %%
 
     // token definitions go here.
-"if"                        RETURN(IF);
-"else"                      RETURN(ELSE);
-"while"                     RETURN(WHILE);
 "print"                     RETURN(PRINT);
-"scan"                      RETURN(SCAN);
-"struct"                    RETURN(STRUCT);
 "return"                    RETURN(RETURN_TOK);
-"array"                     RETURN(ARRAY);
-{punctuation}               RETURN(yytext[0]);
+"end"                       RETURN(END);
 {identifier}                {
                                 yylval.symbol = symbolTableRoot->FullLookup(yytext);
                                
-                                if (yylval.symbol != nullptr)
-                                {
-                                    if(yylval.symbol->IsType())
-                                    {
-                                        RETURN(TYPE_ID);
-                                    }
-                                }
-                                else
+                                if (yylval.symbol == nullptr)
                                 {
                                     yylval.symbol = new cSymbol(yytext);
                                 }
@@ -61,10 +44,6 @@ junk                .
 {integer_const}             {
                                 yylval.int_val = atoi(yytext);
                                 RETURN(INT_VAL);
-                            }
-{float_const}               {
-                                yylval.float_val = atof(yytext);
-                                RETURN(FLOAT_VAL);
                             }
 {whitespace}                //{};
 {comment}                   //{};
